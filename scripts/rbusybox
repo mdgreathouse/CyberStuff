@@ -1,0 +1,22 @@
+# usage: ./rbusybox <remoteUser> <remoteHost> <command>
+# Send busybox to remote host and execute <command> under user <remoteUser>
+#################################
+BUSYBOX=$(which busybox)
+REMOTEUSER=$1
+REMOTEHOST=$2
+COMMAND=$3
+
+if [ "$#" -lt 3 ]; then
+   echo "usage: ./rbusybox <remoteUser> <remoteHost> <Command>"
+   exit 1
+fi
+
+if [ -z "$SSHPASS" ]; then
+   echo "$SSHPASS environmental variable not set. Enter Passwd:"
+   read -s password
+   export SSHPASS=${password}
+fi 
+
+sshpass -e scp ${BUSYBOX} ${REMOTEUSER}@${REMOTEHOST}:
+sshpass -e ssh ${REMOTEUSER}@${REMOTEHOST} ./busybox ${COMMAND}
+sshpass -e ssh ${REMOTEUSER}@${REMOTEHOST} ./busybox rm -f ./busybox

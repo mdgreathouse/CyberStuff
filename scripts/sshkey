@@ -1,0 +1,31 @@
+#!/bin/bash
+#credit: bpsizemore
+#A script for creating and distributing sshkeys to a host.
+#Usage sshkeys hostname user remotepw
+
+Host=$1; #Hostname or ip of the remote machine.
+User=$2; #Username of the user on the remote machine.
+Password=$3; #Password of the user on the remote machine.
+
+
+if [ $4 != "" ]
+then
+        Port=$4
+else
+        Port=22
+fi
+
+echo "Generating a new ssh keypair."
+yes "" | ssh-keygen -f ~/.ssh/new_key > /dev/null 2>&1
+
+echo "Adding new private key to your agent."
+ssh-add ~/.ssh/new_key > /dev/null 2>&1
+
+echo "Copying public key onto remote host."
+sshpass -p$Password scp -P$Port ~/.ssh/new_key.pub $User@$Host:~/.ssh/authorized_keys
+
+echo "Setting correct permissions on remote host."
+sshpass -p$Password ssh -p$Port $User@$Host "chmod 664 ~/.ssh/authorized_keys;chmod 711 ~/.ssh"
+
+echo "You should now have ssh key access to the other machine."
+echo "Quitting..."

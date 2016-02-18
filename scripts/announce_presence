@@ -1,0 +1,7 @@
+#/bin/bash
+#sends an endless loop to all computers specified in machines
+#messy, but works for now
+
+for box in $(cat machines); do 
+	ssh root@${box} 'echo "Do not worry, your machine is secure ;)" > /home/loud/Desktop/clickme'
+done

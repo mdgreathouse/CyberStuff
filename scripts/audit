@@ -1,0 +1,57 @@
+#!/bin/bash
+
+###################################
+# Mostly from Bobby's Git
+# Run general system and user check
+# Use -c to run cron check
+###################################
+
+#find OS and Release
+echo "Issue"
+cat /etc/issue
+
+#List Bash users
+echo "List of bash users-----------------------------------"
+cat /etc/passwd | grep bash
+echo
+
+#List users using something other than bash
+echo "list users using other shells-------------------------"
+cat /etc/passwd | grep sh
+echo
+
+#Show Hostname
+echo "Hostname: "$HOSTNAME
+echo
+
+#Display Users logged in
+echo "Users logged in --------------------------------------"
+w -s
+echo
+
+#Resource Usage
+echo "Resource usage----------------------------------------"
+uptime
+echo
+
+#List Listening Ports
+echo "Listening Ports---------------------------------------"
+netstat -tulpn
+echo 
+
+#Basic service check
+echo "Service Check----------------------------------------"
+service --status-all > /tmp/a 2>/dev/null
+cat /tmp/a | grep +
+echo
+
+#Cron Check
+if [ -f ./check-cron ]
+	then
+	if [ "$1" == "-c" ]
+		then
+		echo "List of crons"
+		./check-cron
+	fi
+fi
+

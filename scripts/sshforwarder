@@ -1,0 +1,23 @@
+#!/bin/bash
+# Credit: bpsizemore
+
+# USAGE: sshforwarder user host
+
+# SSH forwarder provides an easier way to send remote ssh commands
+# If you do not wish to stay logged in and simply send commands:
+# ex. ssh user@host "Insert Your Command Here"
+# After providing a user and host to start it. 
+# SSH forwarder presents itself as a simple shell.
+# When you run commands however, they are forwarded to the remote machine.
+
+user=$1
+host=$2
+echo "Your commands are being forwarded to $user@$host";
+
+while (true)
+do
+	read -r command
+	# add if command is empty functionality here.
+	ssh -p 20110 $user@$host "$command"
+	echo -e ""
+done

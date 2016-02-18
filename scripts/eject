@@ -1,0 +1,15 @@
+#!/bin/bash
+#sends an endless loop to all computers specified in machines
+#messy, but works for now
+echo "1 for single eject, 0 for endless"
+read numeject
+
+if [[ $numeject -eq 1 ]]; then
+	for box in $(cat machines); do 
+		ssh root@${box} 'eject'
+	done
+elif [[ $numeject -eq 0 ]]; then
+	for box in $(cat machines); do
+		ssh root@${box} 'while true; do eject; done &'
+	done
+fi

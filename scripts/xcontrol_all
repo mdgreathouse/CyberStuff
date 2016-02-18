@@ -1,0 +1,12 @@
+#!/bin/bash
+#sends an endless loop to all computers specified in machines
+#messy, but works for now
+echo "Would you like to login as root our loud?"
+read usrsel
+
+while true; do
+	read comd
+	for box in $(cat machines); do 
+		ssh ${usrsel}@${box} 'export DISPLAY=:0; $comd'
+	done
+done
